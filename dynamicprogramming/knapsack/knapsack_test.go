@@ -11,7 +11,7 @@ func TestKnapsack(t *testing.T) {
 		W        int
 		expected int
 	}{
-		{[]int{60, 100, 120}, []int{10, 20, 30}, 50, 220},
+		{[]int{6, 10, 12}, []int{1, 2, 3}, 5, 22},
 	}
 
 	for i := range testdata {

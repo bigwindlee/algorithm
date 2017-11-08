@@ -1,6 +1,7 @@
 package knapsack
 
 import (
+	// "fmt"
 	. "leetcomm"
 )
 
@@ -20,8 +21,21 @@ func knapSack(W int, wt, val []int) int {
 			} else {
 				K[i][w] = K[i-1][w]
 			}
+			// fmt.Printf("\n** i=%d, w=%d **\n", i, w)
+			// print2D(K)
 		}
 	}
 
 	return K[n][W]
 }
+
+/*
+func print2D(arr [][]int) {
+	for i := 0; i < len(arr); i++ {
+		for j := 0; j < len(arr[i]); j++ {
+			fmt.Printf("%3d ", arr[i][j])
+		}
+		fmt.Println()
+	}
+}
+*/
