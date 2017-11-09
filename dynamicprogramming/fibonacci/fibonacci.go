@@ -55,7 +55,7 @@ func fib_c_driver(n int) int {
 }
 
 /*---------------------------------------------------------------------------*/
-/* Exponential time complexity! */
+/* Naive recursion. Exponential time complexity! */
 func fib_r(n int) int {
 	if n == 0 {
 		return 0
