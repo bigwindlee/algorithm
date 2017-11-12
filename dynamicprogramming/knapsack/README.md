@@ -1,6 +1,53 @@
 思路：
-  1）TODO
-  2）TODO
+
+0-1背包问题，在不超重的前提下使背包的价值最大化。
+
+有n件物品和一个容量为WT的背包，物品的重量为 w []int, 价值为 v []int；
+
+动态规划的核心是拆分问题，建立状态转移方式，也就是用子集的结果计算表达父集的结果（递归）！
+
+本例如何寻找状态转移方程呢？可效仿Longest Common Sequence的解法，从父集相对于子集的最后一个元素着手。
+
+假设返回最大价值的函数为：
+  func KnapSack_r(WT int, w, v []int) int
+
+从子集到父集，最后一件物品在不在背包里呢？都有可能。
+假设在背包里，那么如何用子集表达父集呢：a := v[i] + KnapSack_r(WT-v[i], w[:len(w)-1], v[:len(v)-1]) // 注意 WT-v[i] >= 0
+假设不在背包里，那么：b := KnapSack_r(WT, w[:len(w)-1], v[:len(v)-1])
+
+因为要求价值最大化，所以父集的表达为：Max(a, b)
+
+因此递归函数的定义为：
+KnapSack_r(WT int, w, v []int) int {
+  if WT == 0 || len(w) == 0 {
+    return 0
+  }
+  if WT < w[len(w)-1] {
+    return KnapSack_r(WT, w[:len(w)-1], v[:len(v)-1])
+  }
+
+  return Max(v[i] + KnapSack_r(WT-v[i], w[:len(w)-1], v[:len(v)-1]), KnapSack_r(WT, w[:len(w)-1], v[:len(v)-1]))
+}
+
+以上是0-1背包问题的递归版本，很显然有很多重复的计算，符合动态规划的特点，因此可转化为递推版本。
+
+观察递归函数的参数，需要cache的计算结果用什么做key呢？用WT和物品的件数。矩阵的2个维度的变化范围是：[0, WT]，[0, n]
+定义矩阵：K[n+1][WT+1], K[i][j] 代表前i件物品放入容量的j的背包中，不超重的前提下可获得的最大价值；
+
+for i:=0; i<=n; i++ {
+  for j:=0; j<=WT, j++ {
+    if i==0 || j==0 {
+      K[i][j] = 0
+    }else if w[i-1] <= j { // 第i件物品在背包中，第i件物品肯定不超当前重量j！
+      K[i][j] = Max(K[i-1][j], k[i-1][j-w[i-1]]+v[i-1]) // 注意第i件物品的重量为w[i-1]，价值为v[i-1]
+    }else{ // 第i件物品不在在背包中
+      K[i][j] = K[i-1][j]
+    }
+  }
+  return K[n][WT]
+}
+
+
 
 
 

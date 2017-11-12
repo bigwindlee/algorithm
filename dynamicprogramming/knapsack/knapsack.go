@@ -1,11 +1,29 @@
 package knapsack
 
 import (
-	// "fmt"
+	"fmt"
 	. "leetcomm"
 )
 
 func knapSack(W int, wt, val []int) int {
+	options := []func(W int, wt, val []int) int{knapSack0, knapSack_r}
+	return options[0](W, wt, val)
+}
+
+func knapSack_r(WT int, wt, val []int) int {
+	fmt.Printf("%d, %v, %v\n", WT, wt, val)
+	if len(wt) == 0 || WT == 0 {
+		return 0
+	}
+	if wt[len(wt)-1] > WT {
+		return knapSack_r(WT, wt[:len(wt)-1], val[:len(val)-1])
+	}
+	// a := val[len(val)-1] + knapSack_r(WT-wt[len(wt)-1], wt[:len(wt)-1], val[len(val)-1])
+	// b := knapSack_r(WT, wt[:len(wt)-1], val[len(val)-1])
+	return Max(val[len(val)-1]+knapSack_r(WT-wt[len(wt)-1], wt[:len(wt)-1], val[:len(val)-1]), knapSack_r(WT, wt[:len(wt)-1], val[:len(val)-1]))
+}
+
+func knapSack0(W int, wt, val []int) int {
 	n := len(val)
 	K := make([][]int, n+1)
 	for i := 0; i < len(K); i++ {
@@ -21,6 +39,7 @@ func knapSack(W int, wt, val []int) int {
 			} else {
 				K[i][w] = K[i-1][w]
 			}
+			fmt.Printf("K[%d][%d] = %d\n", i, w, K[i][w])
 			// fmt.Printf("\n** i=%d, w=%d **\n", i, w)
 			// print2D(K)
 		}
